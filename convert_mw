@@ -1,0 +1,9 @@
+#!/bin/bash
+
+CPUS=$(nproc)
+
+find yaml/wiki/ -type f -name '*.yaml' | parallel -j $CPUS -N100 --gnu ruby wiki2html.rb
+
+find yaml/html/ -type f -name '*.yaml' | parallel -j $CPUS -N100 --gnu ruby html2any.rb md
+
+find yaml/html/ -type f -name '*.yaml' | parallel -j $CPUS -N100 --gnu ruby html2any.rb rst

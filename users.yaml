@@ -1,0 +1,7 @@
+---
+user1:
+  name: User Name 1
+  mail: user1@yourdomain.example.org
+user2:
+  name: User Name 2
+  mail: user2@yourdomain.example.org

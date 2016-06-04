@@ -1,0 +1,6 @@
+#!/bin/bash
+
+REPO=${1:-repo}
+rm -rf ${REPO}
+mkdir ${REPO}
+git --work-tree=${REPO} --git-dir=${REPO}/.git init

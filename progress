@@ -1,0 +1,22 @@
+#!/bin/bash
+
+function progress ()
+{
+	m=$1
+	n=$2
+	u=$3
+	echo "$m $u / $n $u ($(echo "100 * $m / $n" | bc)%)"
+}
+
+mw_files=$(find yaml/wiki/ -type f | wc -l)
+mw_du=$(du -ms yaml/wiki/ | awk '{print $1}')
+
+for item in html rst md
+do
+	echo "Progress for ${item}:"
+	echo "$(progress $(find yaml/${item}/ -type f | wc -l) ${mw_files} "files")"
+	echo "$(progress $(du -ms yaml/${item}/ | awk '{print $1}') ${mw_du} MB)"
+	echo
+done
+
+ps o start_time,time,args | grep -v grep | grep ruby | cut -c 1-120
