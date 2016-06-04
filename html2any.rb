@@ -14,7 +14,7 @@ class String
 			result = PandocRuby.convert(self, :from => :html, :to => :rst)
 			header = /\[`edit <\?section\=(?:[^\]]*)\] /
 		else
-			result = self
+			result = PandocRuby.convert(self, :from => :html, :to => type.to_sym)
 			header = nil
 		end
 		result.gsub(header, '')
