@@ -1,9 +1,21 @@
 #!/bin/bash
 
 CPUS=$(nproc)
+MY_FORMAT=md
 
+# generate wikidump.xml with the tool provided by MediaWiki:
+# php dumpBackup.php --full --include-files > /path/to/wikidump.xml
+
+# You should create users.yaml manually ... This SQL query can help:
+# select concat(user_name, ':\n  name: ', user_real_name, '\n  mail: ', user_email) from wiki.wiki_user where user_email != '';
+
+ruby xml2yaml.rb /path/to/wikidump.xml
+
+# These conversions are extremely parallellizable
 find yaml/wiki/ -type f -name '*.yaml' | parallel -j $CPUS -N100 --gnu ruby wiki2html.rb
 
-find yaml/html/ -type f -name '*.yaml' | parallel -j $CPUS -N100 --gnu ruby html2any.rb md
+find yaml/html/ -type f -name '*.yaml' | parallel -j $CPUS -N100 --gnu ruby html2any.rb $MY_FORMAT
 
-find yaml/html/ -type f -name '*.yaml' | parallel -j $CPUS -N100 --gnu ruby html2any.rb rst
+
+# This can not be parallellized and should be in order
+find yaml/${MY_FORMAT}/ -type f -name '*.yaml' | sort | xargs ruby any2git.rb
